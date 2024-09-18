@@ -1,8 +1,7 @@
-package WebDriver;
+package webDriver;
 
-import WebElement.Browser;
-import WebElement.Element;
 import org.openqa.selenium.By;
+import webElement.Element;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class LoggingDriver extends DriverDecorator {
 
     @Override
     public void start(Browser browser) {
-        System.out.println(STR."Start browser = \{browser.toString()}");
+        System.out.println("Start browser = " + browser.name());
         driver.start(browser);
     }
 
@@ -26,7 +25,7 @@ public class LoggingDriver extends DriverDecorator {
 
     @Override
     public void goToUrl(String url) {
-        System.out.println(STR."Go to URL = \{url}");
+        System.out.println("Go to URL = " + url);
         driver.goToUrl(url);
     }
 
@@ -40,5 +39,23 @@ public class LoggingDriver extends DriverDecorator {
     public List<Element> findElements(By locator) {
         System.out.println("Find elements");
         return driver.findElements(locator);
+    }
+
+    @Override
+    public void waitForAjax() {
+        System.out.println("Wait for ajax");
+        driver.waitForAjax();
+    }
+
+    @Override
+    public void waitUntilPageLoadsCompletely() {
+        System.out.println("Wait for page loads complete");
+        driver.waitForAjax();
+    }
+
+    @Override
+    public void deleteAllCookies() {
+        System.out.println("Delete all cookies");
+        this.driver.deleteAllCookies();
     }
 }

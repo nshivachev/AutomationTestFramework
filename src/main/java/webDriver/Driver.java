@@ -1,8 +1,7 @@
-package WebDriver;
+package webDriver;
 
-import WebElement.Browser;
-import WebElement.Element;
 import org.openqa.selenium.By;
+import webElement.Element;
 
 import java.util.List;
 
@@ -17,4 +16,10 @@ public abstract class Driver {
     public abstract Element findElement(By locator);
 
     public abstract List<Element> findElements(By locator);
+
+    public abstract void waitForAjax();
+
+    public abstract void waitUntilPageLoadsCompletely();
+
+    public abstract void deleteAllCookies();
 }

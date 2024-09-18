@@ -1,26 +1,27 @@
-package WebElement;
+package webElement;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class WebElement extends Element {
+public class WebCoreElement extends Element {
 
     private final WebDriver webDriver;
-    private final org.openqa.selenium.WebElement webElement;
+    private final WebElement webElement;
     private final By by;
 
-    public WebElement(WebDriver webDriver, org.openqa.selenium.WebElement webElement, By by) {
+    public WebCoreElement(WebDriver webDriver, WebElement webElement, By by) {
         this.webDriver = webDriver;
         this.webElement = webElement;
         this.by = by;
     }
 
     @Override
-    public By by() {
+    public By getBy() {
         return by;
     }
 
@@ -41,6 +42,11 @@ public class WebElement extends Element {
 
     @Override
     public void typeText(String text) {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         webElement.clear();
         webElement.sendKeys(text);
     }
@@ -57,7 +63,7 @@ public class WebElement extends Element {
     }
 
     private void waitToBeClickable(By by) {
-        WebDriverWait webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+        var webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
         webDriverWait.until(ExpectedConditions.elementToBeClickable(by));
     }
 }

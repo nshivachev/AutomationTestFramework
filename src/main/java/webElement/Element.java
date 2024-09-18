@@ -1,9 +1,9 @@
-package WebElement;
+package webElement;
 
 import org.openqa.selenium.By;
 
 public abstract class Element {
-    public abstract By by();
+    public abstract By getBy();
 
     public abstract String getText();
 
