@@ -66,7 +66,7 @@ public class BrowserLaunchTestBehaviorObserver extends BaseTestBehaviorObserver 
     }
 
     private BrowserConfiguration getExecutionBrowserMethodLevel(Method memberInfo) {
-        var executionBrowserAnnotation = (ExecutionBrowser)memberInfo.getDeclaredAnnotation(ExecutionBrowser.class);
+        var executionBrowserAnnotation = memberInfo.getDeclaredAnnotation(ExecutionBrowser.class);
 
         if (executionBrowserAnnotation == null) {
             return null;
@@ -76,7 +76,7 @@ public class BrowserLaunchTestBehaviorObserver extends BaseTestBehaviorObserver 
     }
 
     private BrowserConfiguration getExecutionBrowserClassLevel(Class<?> type) {
-        var executionBrowserAnnotation = (ExecutionBrowser)type.getDeclaredAnnotation(ExecutionBrowser.class);
+        var executionBrowserAnnotation = type.getDeclaredAnnotation(ExecutionBrowser.class);
 
         if (executionBrowserAnnotation == null) {
             return null;
