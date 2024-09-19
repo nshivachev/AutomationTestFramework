@@ -41,17 +41,19 @@ public class BrowserLaunchTestBehaviorObserver extends BaseTestBehaviorObserver 
         }
     }
 
-    private void restartBrowser() {
-        try {
-            driver.quit();
-        } catch (NullPointerException _) {}
+    private void startBrowser() {
+        driver.start(currentBrowserConfiguration.getBrowser());
+    }
 
+    private void restartBrowser() {
+        driver.quit();
         driver.start(currentBrowserConfiguration.getBrowser());
     }
 
     private Boolean shouldRestartBrowser(BrowserConfiguration browserConfiguration) {
         if (previousBrowserConfiguration == null) {
-            return true;
+            startBrowser();
+            return false;
         }
 
         Boolean shouldRestartBrowser = browserConfiguration.getBrowserBehavior() == BrowserBehavior.RESTART_EVERY_TIME

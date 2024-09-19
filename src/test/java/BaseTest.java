@@ -1,24 +1,24 @@
+import listeners.BrowserLaunchTestBehaviorObserver;
+import listeners.ExecutionSubject;
+import listeners.TestExecutionSubject;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
-import listeners.BrowserLaunchTestBehaviorObserver;
-import listeners.TestExecutionSubject;
-import listeners.ExecutionSubject;
 import webDriver.Driver;
 import webDriver.LoggingDriver;
 import webDriver.WebCoreDriver;
 
 public class BaseTest {
 
-    private static final TestExecutionSubject executionSubject;
-    private static final Driver driver;
+    private static final ThreadLocal<TestExecutionSubject> executionSubject = ThreadLocal.withInitial(ExecutionSubject::new);
+    private static final ThreadLocal<Driver> driver = ThreadLocal.withInitial(() -> new LoggingDriver(new WebCoreDriver()));
     private ITestResult result;
 
-    static  {
-        executionSubject = new ExecutionSubject();
-        driver = new LoggingDriver(new WebCoreDriver());
-        new BrowserLaunchTestBehaviorObserver(executionSubject, driver);
+    static {
+        executionSubject.set(new ExecutionSubject());
+        driver.set(new LoggingDriver(new WebCoreDriver()));
+        new BrowserLaunchTestBehaviorObserver(executionSubject.get(), driver.get());
     }
 
     public String getTestName() {
@@ -34,13 +34,13 @@ public class BaseTest {
     }
 
     public Driver getDriver() {
-        return driver;
+        return driver.get();
     }
 
     @AfterSuite
     public void afterSuite() {
-        if (driver != null) {
-            driver.quit();
+        if (driver.get() != null) {
+            driver.get().quit();
         }
     }
 
@@ -49,18 +49,19 @@ public class BaseTest {
         setTestResult(result);
         var testClass = this.getClass();
         var methodInfo = testClass.getMethod(getTestResult().getMethod().getMethodName());
-        executionSubject.preTestInit(getTestResult(), methodInfo);
+        executionSubject.get().preTestInit(getTestResult(), methodInfo);
         testInit();
-        executionSubject.postTestInit(getTestResult(), methodInfo);
+        executionSubject.get().postTestInit(getTestResult(), methodInfo);
     }
 
     @AfterMethod
-    public void afterMethod() throws NoSuchMethodException {
+    public void afterMethod(ITestResult result) throws NoSuchMethodException {
+        setTestResult(result);
         var testClass = this.getClass();
         var memberInfo = testClass.getMethod(getTestResult().getMethod().getMethodName());
-        executionSubject.preTestCleanup(getTestResult(), memberInfo);
+        executionSubject.get().preTestCleanup(getTestResult(), memberInfo);
         testCleanup();
-        executionSubject.postTestCleanup(getTestResult(), memberInfo);
+        executionSubject.get().postTestCleanup(getTestResult(), memberInfo);
     }
 
     protected void testInit() {}

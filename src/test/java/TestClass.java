@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import webDriver.Browser;
 import webElement.Element;
 
-@ExecutionBrowser(browser = Browser.CHROME, browserBehavior = BrowserBehavior.REUSE_IF_STARTED)
+@ExecutionBrowser(browser = Browser.CHROME, browserBehavior = BrowserBehavior.RESTART_ON_FAIL)
 public class TestClass extends BaseTest {
 
     @Test(priority = 1)
