@@ -1,5 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="MyTestSuite">
+<!--    parallel="methods" thread-count="1">-->
     <test name="SampleTests">
         <classes>
             <class name="TestClass"/>

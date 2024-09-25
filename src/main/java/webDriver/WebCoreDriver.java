@@ -1,14 +1,14 @@
 package webDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.proxy.CaptureType;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,18 +25,34 @@ public class WebCoreDriver extends Driver {
 
     private WebDriver webDriver;
     private WebDriverWait webDriverWait;
+    private BrowserMobProxyServer proxyServer;
 
     @Override
     public void start(Browser browser) {
+        proxyServer = new BrowserMobProxyServer();
+        proxyServer.start();
+        proxyServer.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
+        proxyServer.newHar();
+        String proxyDetails = "127.0.0.1:" + proxyServer.getPort();
+        final Proxy proxyConfig = new Proxy()
+                .setHttpProxy(proxyDetails)
+                .setSslProxy(proxyDetails);
+
         webDriver = switch (browser) {
             case CHROME -> {
                 WebDriverManager.chromedriver().setup();
-                ChromeOptions chromeOptions = new ChromeOptions();
+                final ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--disable-search-engine-choice-screen");
+                chromeOptions.setProxy(proxyConfig);
+                chromeOptions.setAcceptInsecureCerts(true);
                 yield new ChromeDriver(chromeOptions);
             }
             case FIREFOX -> {
                 WebDriverManager.firefoxdriver().setup();
+                final FirefoxOptions firefoxOptions = new FirefoxOptions();
+                firefoxOptions.addArguments("--disable-search-engine-choice-screen");
+                firefoxOptions.setProxy(proxyConfig);
+                firefoxOptions.setAcceptInsecureCerts(true);
                 yield new FirefoxDriver();
             }
             case EDGE -> {
@@ -54,12 +70,14 @@ public class WebCoreDriver extends Driver {
             default -> throw new IllegalArgumentException("No such browser " + browser.name());
         };
 
+        proxyServer.blacklistRequests("(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)", 400);
         webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
     }
 
     @Override
     public void quit() {
         webDriver.quit();
+        proxyServer.abort();
     }
 
     @Override
