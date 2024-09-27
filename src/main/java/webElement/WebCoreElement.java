@@ -66,4 +66,10 @@ public class WebCoreElement extends Element {
         var webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
         webDriverWait.until(ExpectedConditions.elementToBeClickable(by));
     }
+
+    @Override
+    public void waitToExists() {
+        var webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+        webDriverWait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
 }

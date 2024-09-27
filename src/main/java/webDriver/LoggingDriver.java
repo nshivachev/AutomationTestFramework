@@ -50,7 +50,7 @@ public class LoggingDriver extends DriverDecorator {
     @Override
     public void waitUntilPageLoadsCompletely() {
         System.out.println("Wait for page loads complete");
-        driver.waitForAjax();
+        driver.waitUntilPageLoadsCompletely();
     }
 
     @Override

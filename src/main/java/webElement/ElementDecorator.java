@@ -44,4 +44,9 @@ public abstract class ElementDecorator extends Element {
     public String getAttribute(String attributeName) {
         return element.getAttribute(attributeName);
     }
+
+    @Override
+    public void waitToExists() {
+        element.waitToExists();
+    }
 }
