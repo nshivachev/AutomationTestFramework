@@ -1,16 +1,16 @@
 package pages;
 
-import webDriver.Driver;
+import webDriver.ElementFindService;
 
 public abstract class BaseAssertions<ElementsT extends BaseElements> {
 
-    protected final Driver driver;
+    protected final ElementFindService elementFindService;
 
-    public BaseAssertions(Driver driver) {
-        this.driver = driver;
+    public BaseAssertions(ElementFindService elementFindService) {
+        this.elementFindService = elementFindService;
     }
 
     protected ElementsT elements() {
-        return NewInstanceFactory.createByTypeParameter(getClass(), 0, driver);
+        return NewInstanceFactory.createByTypeParameter(getClass(), 0, elementFindService);
     }
 }

@@ -64,7 +64,9 @@ public class BaseTest {
         executionSubject.get().postTestCleanup(getTestResult(), memberInfo);
     }
 
-    protected void testInit() {}
+    protected void testInit() {
+    }
 
-    protected void testCleanup() {}
+    protected void testCleanup() {
+    }
 }

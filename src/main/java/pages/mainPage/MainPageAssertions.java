@@ -2,12 +2,12 @@ package pages.mainPage;
 
 import org.testng.Assert;
 import pages.BaseAssertions;
-import webDriver.Driver;
+import webDriver.ElementFindService;
 
 public class MainPageAssertions extends BaseAssertions<MainPageElements> {
 
-    public MainPageAssertions(Driver driver) {
-        super(driver);
+    public MainPageAssertions(ElementFindService elementFindService) {
+        super(elementFindService);
     }
 
     public void assertUserNameField() {

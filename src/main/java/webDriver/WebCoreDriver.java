@@ -20,6 +20,7 @@ import webElement.WebCoreElement;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class WebCoreDriver extends Driver {
 
@@ -86,6 +87,11 @@ public class WebCoreDriver extends Driver {
     }
 
     @Override
+    public String getCurrentUrl() {
+        return webDriver.getCurrentUrl();
+    }
+
+    @Override
     public Element findElement(By locator) {
         var nativeWebElement = webDriverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
         Element element = new WebCoreElement(webDriver, nativeWebElement, locator);
@@ -121,7 +127,56 @@ public class WebCoreDriver extends Driver {
     }
 
     @Override
+    public void addCookie(String cookieName, String cookieValue, String path) {
+        Cookie cookie = new Cookie.Builder(cookieName, cookieValue)
+                .path(path)
+                .build();
+
+        webDriver.manage().addCookie(cookie);
+    }
+
+    @Override
     public void deleteAllCookies() {
         webDriver.manage().deleteAllCookies();
+    }
+
+    @Override
+    public void deleteCookie(String cookieName) {
+        webDriver.manage().deleteCookieNamed(cookieName);
+    }
+
+    @Override
+    public List<Cookie> getAllCookies() {
+        return new ArrayList<>(webDriver.manage().getCookies());
+    }
+
+    @Override
+    public String getCookie(String cookieName) {
+        Cookie cookie = webDriver.manage().getCookieNamed(cookieName);
+
+        if (cookie != null) {
+            return cookie.getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public void handle(Function<Object, Alert> function, DialogButton dialogButton) {
+        Alert alert = function.apply(webDriver);
+
+        if (alert != null) {
+            switch (dialogButton) {
+                case ACCEPT:
+                    alert.accept();  // Accept the alert
+                    break;
+                case DISMISS:
+                    alert.dismiss();  // Dismiss the alert
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown DialogButton: " + dialogButton);
+            }
+        } else {
+            System.out.println("No alert present.");
+        }
     }
 }

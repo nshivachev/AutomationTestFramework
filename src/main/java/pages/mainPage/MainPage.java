@@ -1,12 +1,13 @@
 package pages.mainPage;
 
 import pages.NavigationAssertableBasePage;
-import webDriver.Driver;
+import webDriver.ElementFindService;
+import webDriver.NavigationService;
 
 public class MainPage extends NavigationAssertableBasePage<MainPageElements, MainPageAssertions> {
 
-    public MainPage(Driver driver) {
-        super(driver);
+    public MainPage(ElementFindService elementFindService, NavigationService navigationService) {
+        super(elementFindService, navigationService);
     }
 
     @Override

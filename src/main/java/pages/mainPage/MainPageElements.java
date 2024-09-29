@@ -2,16 +2,16 @@ package pages.mainPage;
 
 import org.openqa.selenium.By;
 import pages.BaseElements;
-import webDriver.Driver;
+import webDriver.ElementFindService;
 import webElement.Element;
 
 public class MainPageElements extends BaseElements {
 
-    public MainPageElements(Driver driver) {
-        super(driver);
+    public MainPageElements(ElementFindService elementFindService) {
+        super(elementFindService);
     }
 
     public Element userNameField() {
-        return driver.findElement(By.id("username"));
+        return elementFindService.findElement(By.id("username"));
     }
 }

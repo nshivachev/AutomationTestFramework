@@ -1,12 +1,12 @@
 package pages;
 
-import webDriver.Driver;
+import webDriver.ElementFindService;
 
 public abstract class BaseElements {
 
-    protected final Driver driver;
+    protected final ElementFindService elementFindService;
 
-    public BaseElements(Driver driver) {
-        this.driver = driver;
+    public BaseElements(ElementFindService elementFindService) {
+        this.elementFindService = elementFindService;
     }
 }

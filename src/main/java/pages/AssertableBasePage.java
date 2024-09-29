@@ -1,14 +1,14 @@
 package pages;
 
-import webDriver.Driver;
+import webDriver.ElementFindService;
 
 public class AssertableBasePage<ElementsT extends BaseElements, AssertionsT extends BaseAssertions<ElementsT>> extends BasePage<ElementsT> {
 
-    public AssertableBasePage(Driver driver) {
-        super(driver);
+    public AssertableBasePage(ElementFindService elementFindService) {
+        super(elementFindService);
     }
 
     public AssertionsT assertions() {
-        return NewInstanceFactory.createByTypeParameter(getClass(), 1, driver);
+        return NewInstanceFactory.createByTypeParameter(getClass(), 1, elementFindService);
     }
 }

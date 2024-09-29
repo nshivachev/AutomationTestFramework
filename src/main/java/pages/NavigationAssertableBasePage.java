@@ -1,15 +1,19 @@
 package pages;
 
-import webDriver.Driver;
+import webDriver.ElementFindService;
+import webDriver.NavigationService;
 
 public abstract class NavigationAssertableBasePage<ElementsT extends BaseElements, AssertionsT extends BaseAssertions<ElementsT>> extends AssertableBasePage<ElementsT, AssertionsT> {
 
-    public NavigationAssertableBasePage(Driver driver) {
-        super(driver);
+    private final NavigationService navigationService;
+
+    public NavigationAssertableBasePage(ElementFindService elementFindService, NavigationService navigationService) {
+        super(elementFindService);
+        this.navigationService = navigationService;
     }
 
     public void open() {
-        driver.goToUrl(getUrl());
+        navigationService.goToUrl(getUrl());
         waitForPageLoad();
     }
 
