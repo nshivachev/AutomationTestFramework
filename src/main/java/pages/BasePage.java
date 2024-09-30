@@ -1,13 +1,14 @@
 package pages;
 
 import webDriver.ElementFindService;
+import webDriver.LoggingSingletonDriver;
 
 public abstract class BasePage<ElementsT extends BaseElements> {
 
     protected final ElementFindService elementFindService;
 
-    public BasePage(ElementFindService elementFindService) {
-        this.elementFindService = elementFindService;
+    public BasePage() {
+        this.elementFindService = LoggingSingletonDriver.getInstance();
     }
 
     protected ElementsT elements() {

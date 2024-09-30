@@ -6,18 +6,17 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import webDriver.Driver;
-import webDriver.LoggingDriver;
-import webDriver.WebCoreDriver;
+import webDriver.LoggingSingletonDriver;
 
 public class BaseTest {
 
     private static final ThreadLocal<TestExecutionSubject> executionSubject = ThreadLocal.withInitial(ExecutionSubject::new);
-    private static final ThreadLocal<Driver> driver = ThreadLocal.withInitial(() -> new LoggingDriver(new WebCoreDriver()));
+    private static final ThreadLocal<Driver> driver = ThreadLocal.withInitial(LoggingSingletonDriver::getInstance);
     private ITestResult result;
 
     static {
         executionSubject.set(new ExecutionSubject());
-        driver.set(new LoggingDriver(new WebCoreDriver()));
+        driver.set(LoggingSingletonDriver.getInstance());
         new BrowserLaunchTestBehaviorObserver(executionSubject.get(), driver.get());
     }
 

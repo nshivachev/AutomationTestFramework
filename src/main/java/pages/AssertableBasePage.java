@@ -1,11 +1,9 @@
 package pages;
 
-import webDriver.ElementFindService;
-
 public class AssertableBasePage<ElementsT extends BaseElements, AssertionsT extends BaseAssertions<ElementsT>> extends BasePage<ElementsT> {
 
-    public AssertableBasePage(ElementFindService elementFindService) {
-        super(elementFindService);
+    public AssertableBasePage() {
+        super();
     }
 
     public AssertionsT assertions() {

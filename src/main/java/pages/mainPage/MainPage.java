@@ -1,13 +1,16 @@
 package pages.mainPage;
 
 import pages.NavigationAssertableBasePage;
-import webDriver.ElementFindService;
-import webDriver.NavigationService;
+import singletonFactory.SingletonFactory;
 
 public class MainPage extends NavigationAssertableBasePage<MainPageElements, MainPageAssertions> {
 
-    public MainPage(ElementFindService elementFindService, NavigationService navigationService) {
-        super(elementFindService, navigationService);
+    private MainPage() {
+        super();
+    }
+
+    public static MainPage getInstance() {
+        return SingletonFactory.getInstance(MainPage.class);
     }
 
     @Override

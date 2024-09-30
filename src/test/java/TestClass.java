@@ -8,17 +8,12 @@ import webDriver.*;
 public class TestClass extends BaseTest {
 
     private static MainPage mainPage;
-    private static ElementFindService elementFindService;
-    private static NavigationService navigationService;
     private static BrowserService browserService;
 
     @Override
     public void testInit() {
-        elementFindService = getDriver();
-        navigationService = getDriver();
-        browserService = getDriver();
-
-        mainPage = new MainPage(elementFindService, navigationService);
+        browserService = LoggingSingletonDriver.getInstance();
+        mainPage = MainPage.getInstance();
     }
 
     @Test(priority = 1)
