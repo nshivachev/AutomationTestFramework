@@ -1,15 +1,15 @@
 package pages;
 
-import webDriver.LoggingSingletonDriver;
+import webDriver.Driver;
 import webDriver.NavigationService;
 
 public abstract class NavigationAssertableBasePage<ElementsT extends BaseElements, AssertionsT extends BaseAssertions<ElementsT>> extends AssertableBasePage<ElementsT, AssertionsT> {
 
     private final NavigationService navigationService;
 
-    public NavigationAssertableBasePage() {
-        super();
-        this.navigationService = LoggingSingletonDriver.getInstance();
+    public NavigationAssertableBasePage(Driver driver) {
+        super(driver);
+        this.navigationService = driver;
     }
 
     public void open() {

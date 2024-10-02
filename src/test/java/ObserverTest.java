@@ -5,7 +5,7 @@ import pages.mainPage.MainPage;
 import webDriver.*;
 
 @ExecutionBrowser(browser = Browser.CHROME, browserBehavior = BrowserBehavior.RESTART_ON_FAIL)
-public class TestClass extends BaseTest {
+public class ObserverTest extends BaseTest {
 
     private static MainPage mainPage;
     private static BrowserService browserService;

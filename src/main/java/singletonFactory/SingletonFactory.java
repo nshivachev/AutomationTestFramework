@@ -16,6 +16,7 @@ public class SingletonFactory {
         synchronized (SingletonFactory.class) {
             if (!instance.mapHolder.containsKey(classOf.getName())) {
                 T obj = null;
+
                 try {
                     Constructor<T> constructor = (Constructor<T>) classOf.getDeclaredConstructors()[0];
                     constructor.setAccessible(true);

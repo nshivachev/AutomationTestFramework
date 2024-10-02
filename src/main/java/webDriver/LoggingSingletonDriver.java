@@ -3,6 +3,7 @@ package webDriver;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import singletonFactory.SingletonFactory;
 import webElement.Element;
 
 import java.util.List;
@@ -17,11 +18,7 @@ public class LoggingSingletonDriver extends DriverDecorator {
     }
 
     public static LoggingSingletonDriver getInstance() {
-        if (instance == null) {
-            instance = new LoggingSingletonDriver(new WebCoreDriver());
-        }
-
-        return instance;
+        return SingletonFactory.getInstance(LoggingSingletonDriver.class, new WebCoreDriver());
     }
 
     @Override

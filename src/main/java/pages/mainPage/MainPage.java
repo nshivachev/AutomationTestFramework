@@ -2,15 +2,17 @@ package pages.mainPage;
 
 import pages.NavigationAssertableBasePage;
 import singletonFactory.SingletonFactory;
+import webDriver.Driver;
+import webDriver.LoggingSingletonDriver;
 
 public class MainPage extends NavigationAssertableBasePage<MainPageElements, MainPageAssertions> {
 
-    private MainPage() {
-        super();
+    private MainPage(Driver driver) {
+        super(driver);
     }
 
     public static MainPage getInstance() {
-        return SingletonFactory.getInstance(MainPage.class);
+        return SingletonFactory.getInstance(MainPage.class, LoggingSingletonDriver.getInstance());
     }
 
     @Override

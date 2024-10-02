@@ -3,7 +3,7 @@
 <!--    parallel="methods" thread-count="1">-->
     <test name="SampleTests">
         <classes>
-            <class name="TestClass"/>
+            <class name="AppTest"/>
         </classes>
     </test>
 </suite>
