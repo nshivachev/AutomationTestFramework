@@ -1,10 +1,12 @@
 package pages.mainPage;
 
-import org.openqa.selenium.By;
+import lombok.experimental.ExtensionMethod;
 import pages.BaseElements;
 import webDriver.ElementFindService;
+import webDriver.ElementFindServiceExtensions;
 import webElement.Element;
 
+@ExtensionMethod(ElementFindServiceExtensions.class)
 public class MainPageElements extends BaseElements {
 
     public MainPageElements(ElementFindService elementFindService) {
@@ -12,6 +14,7 @@ public class MainPageElements extends BaseElements {
     }
 
     public Element userNameField() {
-        return elementFindService.findElement(By.id("username"));
+//        return elementFindService.findById("username");
+        return elementFindService.findByIdContaining("username");
     }
 }

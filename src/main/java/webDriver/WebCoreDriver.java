@@ -13,6 +13,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import strategyDesignPattern.*;
 import webElement.Element;
 import webElement.LogElement;
 import webElement.WebCoreElement;
@@ -92,21 +93,81 @@ public class WebCoreDriver extends Driver {
     }
 
     @Override
-    public Element findElement(By locator) {
-        var nativeWebElement = webDriverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
-        Element element = new WebCoreElement(webDriver, nativeWebElement, locator);
+    public Element findById(String id) {
+        return find(new IdFindStrategy(id));
+    }
+
+    @Override
+    public Element findByXPath(String xpath) {
+        return find(new XPathFindStrategy(xpath));
+    }
+
+    @Override
+    public Element findByTag(String tag) {
+        return find(new TagFindStrategy(tag));
+    }
+
+    @Override
+    public Element findByClass(String cssClass) {
+        return find(new ClassFindStrategy(cssClass));
+    }
+
+    @Override
+    public Element findByCss(String css) {
+        return find(new CssFindStrategy(css));
+    }
+
+    @Override
+    public Element findByLinkText(String linkText) {
+        return find(new LinkTextFindStrategy(linkText));
+    }
+
+    @Override
+    public List<Element> findAllById(String id) {
+        return findAll(new IdFindStrategy(id));
+    }
+
+    @Override
+    public List<Element> findAllByXPath(String xpath) {
+        return findAll(new XPathFindStrategy(xpath));
+    }
+
+    @Override
+    public List<Element> findAllByTag(String tag) {
+        return findAll(new TagFindStrategy(tag));
+    }
+
+    @Override
+    public List<Element> findAllByClass(String cssClass) {
+        return findAll(new ClassFindStrategy(cssClass));
+    }
+
+    @Override
+    public List<Element> findAllByCss(String css) {
+        return findAll(new CssFindStrategy(css));
+    }
+
+    @Override
+    public List<Element> findAllByLinkText(String linkText) {
+        return findAll(new LinkTextFindStrategy(linkText));
+    }
+
+    @Override
+    public Element find(FindStrategy findStrategy) {
+        var nativeWebElement = webDriverWait.until(ExpectedConditions.presenceOfElementLocated(findStrategy.convert()));
+        Element element = new WebCoreElement(webDriver, nativeWebElement, findStrategy.convert());
         Element logElement = new LogElement(element);
 
         return logElement;
     }
 
     @Override
-    public List<Element> findElements(By locator) {
-        List<WebElement> nativeWebElements = webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+    public List<Element> findAll(FindStrategy findStrategy) {
+        List<WebElement> nativeWebElements = webDriverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(findStrategy.convert()));
         var elements = new ArrayList<Element>();
 
         nativeWebElements.forEach(nativeWebElement -> {
-            Element element = new WebCoreElement(webDriver, nativeWebElement, locator);
+            Element element = new WebCoreElement(webDriver, nativeWebElement, findStrategy.convert());
             Element logElement = new LogElement(element);
             elements.add(logElement);
         });
@@ -167,10 +228,10 @@ public class WebCoreDriver extends Driver {
         if (alert != null) {
             switch (dialogButton) {
                 case ACCEPT:
-                    alert.accept();  // Accept the alert
+                    alert.accept();
                     break;
                 case DISMISS:
-                    alert.dismiss();  // Dismiss the alert
+                    alert.dismiss();
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown DialogButton: " + dialogButton);

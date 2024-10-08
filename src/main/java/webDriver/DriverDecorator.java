@@ -1,6 +1,6 @@
 package webDriver;
 
-import org.openqa.selenium.By;
+import strategyDesignPattern.FindStrategy;
 import webElement.Element;
 
 import java.util.List;
@@ -29,13 +29,73 @@ public abstract class DriverDecorator extends Driver {
     }
 
     @Override
-    public Element findElement(By locator) {
-        return driver.findElement(locator);
+    public Element findById(String id) {
+        return driver.findById(id);
     }
 
     @Override
-    public List<Element> findElements(By locator) {
-        return driver.findElements(locator);
+    public Element findByXPath(String xpath) {
+        return driver.findByXPath(xpath);
+    }
+
+    @Override
+    public Element findByTag(String tag) {
+        return driver.findByTag(tag);
+    }
+
+    @Override
+    public Element findByClass(String cssClass) {
+        return driver.findByClass(cssClass);
+    }
+
+    @Override
+    public Element findByCss(String css) {
+        return driver.findByCss(css);
+    }
+
+    @Override
+    public Element findByLinkText(String linkText) {
+        return driver.findByLinkText(linkText);
+    }
+
+    @Override
+    public List<Element> findAllById(String id) {
+        return driver.findAllById(id);
+    }
+
+    @Override
+    public List<Element> findAllByXPath(String xpath) {
+        return driver.findAllByXPath(xpath);
+    }
+
+    @Override
+    public List<Element> findAllByTag(String tag) {
+        return driver.findAllByTag(tag);
+    }
+
+    @Override
+    public List<Element> findAllByClass(String cssClass) {
+        return driver.findAllByClass(cssClass);
+    }
+
+    @Override
+    public List<Element> findAllByCss(String css) {
+        return driver.findAllByCss(css);
+    }
+
+    @Override
+    public List<Element> findAllByLinkText(String linkText) {
+        return driver.findAllByLinkText(linkText);
+    }
+
+    @Override
+    public Element find(FindStrategy findStrategy) {
+        return driver.find(findStrategy);
+    }
+
+    @Override
+    public List<Element> findAll(FindStrategy findStrategy) {
+        return driver.findAll(findStrategy);
     }
 
     @Override
