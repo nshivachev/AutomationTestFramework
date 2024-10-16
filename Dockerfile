@@ -37,4 +37,4 @@ RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
-CMD ["java", "-Dwebdriver.chrome.driver=/usr/bin/chromedriver", "-jar", "app.jar"]
+CMD ["java", "-Dwebdriver.chrome.driver=/usr/local/bin/chromedriver", "-jar", "app.jar"]
