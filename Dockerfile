@@ -30,8 +30,8 @@ ENV PATH="/usr/local/bin:${PATH}"
 WORKDIR /app
 COPY . /app
 
-# Install Maven (optional, if needed)
-RUN apt-get update && apt-get install -y maven
+## Install Maven (optional, if needed)
+#RUN apt-get update && apt-get install -y maven
 
 # Run Maven to build the project (adjust as needed if using Gradle)
 RUN mvn clean install
