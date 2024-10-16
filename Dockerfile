@@ -1,5 +1,5 @@
 # Maven image based on JDK 16
-FROM maven:3.8.5-eclipse-temurin-16
+FROM maven:3.9.8-eclipse-temurin-17
 
 # Set working directory
 WORKDIR /workspace
