@@ -1,5 +1,5 @@
 # Base image with Java 11 (can change version as needed)
-FROM openjdk:11-jdk-slim
+FROM openjdk:22-jdk-slim
 
 # Install curl, wget, unzip, Chrome, and necessary dependencies
 RUN apt-get update && apt-get install -y \
