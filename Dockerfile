@@ -1,39 +1,41 @@
-FROM maven:3.8.6-openjdk-11-slim AS builder
+FROM openjdk:11
 
-WORKDIR /app
+# Set environment variables
+ENV MAVEN_VERSION=3.8.6
+ENV MAVEN_HOME=/opt/maven
+ENV PATH=${MAVEN_HOME}/bin:${PATH}
 
-COPY pom.xml .
-
-RUN mvn dependency:go-offline
-
-COPY src ./src
-
-RUN mvn package
-
-FROM openjdk:11-jre-slim
-
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     wget \
     unzip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    gnupg \
+    curl \
+    xvfb \
+    libxi6 \
+    libgconf-2-4 \
+    && apt-get clean
 
-RUN wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends /tmp/google-chrome.deb \
-    && rm /tmp/google-chrome.deb \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install Maven
+RUN wget -q https://www-us.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    && tar -xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    && mv apache-maven-${MAVEN_VERSION} ${MAVEN_HOME} \
+    && rm apache-maven-${MAVEN_VERSION}-bin.tar.gz
 
-RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) \
-    && wget -N https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip \
-    && unzip chromedriver_linux64.zip -d /usr/local/bin/ \
-    && chmod +x /usr/local/bin/chromedriver \
-    && rm chromedriver_linux64.zip
+# Install Google Chrome
+RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update && apt-get install -y google-chrome-stable
 
-ENV DISPLAY=:99
-
+# Set working directory
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
 
-CMD ["java", "-Dwebdriver.chrome.driver=/usr/local/bin/chromedriver", "-jar", "app.jar"]
+# Copy Maven project files to container
+COPY pom.xml ./
+RUN mvn dependency:resolve
+
+# Copy rest of the project
+COPY . .
+
+# Run Maven tests by default
+CMD ["mvn", "test"]
