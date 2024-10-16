@@ -1,40 +1,44 @@
-# Maven image based on JDK 16
-FROM maven:3.9.8-eclipse-temurin-17
+# Base image with Java 11 (can change version as needed)
+FROM openjdk:11-jdk-slim
 
-# Set working directory
-WORKDIR /workspace
-ENV DEBIAN_FRONTEND=noninteractive
+# Install curl, wget, unzip, Chrome, and necessary dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    unzip \
+    gnupg \
+    --no-install-recommends
 
-# Install necessary libraries
-RUN apt-get update && \
-    apt-get install -y libglib2.0-0 libnss3 libx11-xcb1 x11vnc xorg xvfb gtk2-engines-pixbuf dbus-x11 xfonts-base xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable unzip && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/tmp/*
+# Add Google Chrome's official GPG key
+RUN curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
-RUN mkdir /opt/drivers
+# Set up Chrome repository
+RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 
-# installing google-chrome-stable
-RUN apt-get install -y gnupg wget curl unzip --no-install-recommends; \
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | \
-    gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/google.gpg --import; \
-    chmod 644 /etc/apt/trusted.gpg.d/google.gpg; \
-    echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list; \
-    apt-get update -y; \
-    apt-get install -y google-chrome-stable;
+# Install Chrome browser and cleanup
+RUN apt-get update && apt-get install -y google-chrome-stable \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# installing chromedriver
-RUN CHROMEDRIVER_VERSION=$(curl https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE); \
-    wget -N https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip -P ~/ && \
-    unzip ~/chromedriver-linux64.zip -d ~/ && \
-    rm ~/chromedriver-linux64.zip && \
-    mv -f ~/chromedriver-linux64/chromedriver /opt/drivers/ && \
-    rm -rf ~/chromedriver-linux64 \
+# Install ChromeDriver (match with Chrome version)
+RUN CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+    wget -N https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
+    rm chromedriver_linux64.zip && \
+    chmod +x /usr/local/bin/chromedriver
 
-# Create maven user
-RUN useradd -u 1000 -m -d /var/maven maven
-RUN chown -R maven:maven ./
-ENV MAVEN_CONFIG /var/maven/.m2
+# Set ChromeDriver in PATH
+ENV PATH="/usr/local/bin:${PATH}"
 
-COPY entrypoint.sh /entrypoint
+# Copy your project files (assuming your Java project uses Maven or Gradle)
+WORKDIR /app
+COPY . /app
 
-ENTRYPOINT ["/entrypoint"]
+# Install Maven (optional, if needed)
+RUN apt-get update && apt-get install -y maven
+
+# Run Maven to build the project (adjust as needed if using Gradle)
+RUN mvn clean install
+
+# Default command to run tests (can modify for specific test suites)
+CMD ["mvn", "test"]
