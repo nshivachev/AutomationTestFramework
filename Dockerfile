@@ -21,11 +21,6 @@ RUN CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com
     rm chromedriver_linux64.zip && \
     chmod +x /usr/local/bin/chromedriver
 
-# Create maven user
-RUN useradd -u 1000 -m -d /var/maven maven
-RUN chown -R maven:maven ./
-ENV MAVEN_CONFIG /var/maven/.m2
-
 ENV DISPLAY=:99
 ENV CHROME_DRIVER_PATH=/usr/local/bin/chromedriver
 
