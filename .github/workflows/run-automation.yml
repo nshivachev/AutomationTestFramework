@@ -17,4 +17,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          docker run my-selenium-automation-image
+          docker run --rm my-selenium-automation-image
