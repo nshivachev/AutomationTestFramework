@@ -1,7 +1,11 @@
-# Use Maven with Java 22 as the base image
+# Maven image based on JDK 16
 FROM maven:3.9.8-eclipse-temurin-22
 
-# Install dependencies: curl, gnupg, wget, unzip, Xvfb, Google Chrome, and ChromeDriver
+# Set working directory
+WORKDIR /workspace
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install necessary libraries
 RUN apt-get update && apt-get install -y \
     curl gnupg wget unzip xvfb \
     ca-certificates && \
@@ -17,18 +21,16 @@ RUN CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com
     rm chromedriver_linux64.zip && \
     chmod +x /usr/local/bin/chromedriver
 
-# Set environment variables for headless Chrome execution
+# Create maven user
+RUN useradd -u 1000 -m -d /var/maven maven
+RUN chown -R maven:maven ./
+ENV MAVEN_CONFIG /var/maven/.m2
+
 ENV DISPLAY=:99
 ENV CHROME_DRIVER_PATH=/usr/local/bin/chromedriver
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
-
-# Copy the project files into the container
 COPY . .
 
-# Pre-download Maven dependencies to speed up builds
 RUN mvn clean install -DskipTests
 
-# Define the default command to run tests with Xvfb (for headless mode)
 ENTRYPOINT ["xvfb-run", "-a", "mvn", "test"]
