@@ -3,7 +3,6 @@ import listeners.ExecutionSubject;
 import listeners.TestExecutionSubject;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import webDriver.Driver;
 import webDriver.LoggingSingletonDriver;
@@ -36,12 +35,12 @@ public class BaseTest {
         return driver.get();
     }
 
-    @AfterSuite
-    public void afterSuite() {
-        if (driver.get() != null) {
-            driver.get().quit();
-        }
-    }
+//    @AfterSuite
+//    public void afterSuite() {
+//        if (driver.get() != null) {
+//            driver.get().quit();
+//        }
+//    }
 
     @BeforeMethod
     public void beforeMethod(ITestResult result) throws NoSuchMethodException {
