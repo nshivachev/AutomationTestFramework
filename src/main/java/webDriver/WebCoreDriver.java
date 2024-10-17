@@ -43,11 +43,19 @@ public class WebCoreDriver extends Driver {
         webDriver = switch (browser) {
             case CHROME -> {
                 WebDriverManager.chromedriver().setup();
-                final ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.addArguments("--disable-search-engine-choice-screen");
-                chromeOptions.setProxy(proxyConfig);
-                chromeOptions.setAcceptInsecureCerts(true);
-                yield new ChromeDriver(chromeOptions);
+                final ChromeOptions options = new ChromeOptions();
+                options.addArguments("--disable-search-engine-choice-screen");
+                options.setProxy(proxyConfig);
+                options.setAcceptInsecureCerts(true);
+                options.addArguments("--headless"); // Run in headless mode
+                options.addArguments("--disable-gpu"); // Disable GPU hardware acceleration
+                options.addArguments("--no-sandbox"); // Bypass OS security model
+                options.addArguments("--disable-dev-shm-usage"); // Overcome limited resource problems
+                options.addArguments("--window-size=1920,1080"); // Set the window size
+                options.addArguments("--remote-debugging-port=9222"); // Enable remote debugging
+                options.addArguments("--disable-extensions"); // Disable extensions
+                options.addArguments("--disable-infobars"); // Disable infobars
+                yield new ChromeDriver(options);
             }
             case FIREFOX -> {
                 WebDriverManager.firefoxdriver().setup();
