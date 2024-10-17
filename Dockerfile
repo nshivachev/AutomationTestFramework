@@ -2,13 +2,13 @@
 FROM openjdk:22-jdk-slim
 
 # Install curl, wget, unzip, Chrome, and other dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    unzip \
-    gnupg \
-    maven \
-    --no-install-recommends
+#RUN apt-get update && apt-get install -y \
+#    curl \
+#    wget \
+#    unzip \
+#    gnupg \
+#    maven \
+#    --no-install-recommends
 
 # Add Google Chrome repository and install Chrome
 RUN curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -30,8 +30,8 @@ ENV PATH="/usr/local/bin:${PATH}"
 WORKDIR /app
 COPY . /app
 
-## Install Maven (optional, if needed)
-#RUN apt-get update && apt-get install -y maven
+# Install Maven (optional, if needed)
+RUN apt-get update && apt-get install -y maven
 
 # Run Maven to build the project (adjust as needed if using Gradle)
 RUN mvn clean install
