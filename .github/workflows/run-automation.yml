@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '22'
-          distribution: ''
+          distribution: 'temurin'
 
       - name: Cache Maven packages
         uses: actions/cache@v2
