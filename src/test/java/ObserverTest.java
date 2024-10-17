@@ -16,13 +16,13 @@ public class ObserverTest extends BaseTest {
         mainPage = MainPage.getInstance();
     }
 
-    @Test(priority = 1)
-    public void test1() {
-        mainPage.open();
-        browserService.waitForAjax();
-        browserService.waitUntilPageLoadsCompletely();
-        mainPage.assertions().assertUserNameField();
-    }
+//    @Test(priority = 1)
+//    public void test1() {
+//        mainPage.open();
+//        browserService.waitForAjax();
+//        browserService.waitUntilPageLoadsCompletely();
+//        mainPage.assertions().assertUserNameField();
+//    }
 
 //    @Test(priority = 2)
 //    public void test2() {

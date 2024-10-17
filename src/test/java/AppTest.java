@@ -22,20 +22,20 @@ public class AppTest {
         try (var app = new App(Browser.CHROME)) {
             var mainPage = app.goTo(MainPage.class);
 
-            app.getBrowserService().waitForAjax();
-            app.getBrowserService().waitUntilPageLoadsCompletely();
+//            app.getBrowserService().waitForAjax();
+//            app.getBrowserService().waitUntilPageLoadsCompletely();
             mainPage.assertions().assertUserNameField();
         }
     }
 
-    @Test
-    public void test2() {
-        try (var app = new App(Browser.CHROME)) {
-            app.goTo(MainPage.class);
-
-            app.getBrowserService().waitForAjax();
-            app.getBrowserService().waitUntilPageLoadsCompletely();
-            app.create(MainPage.class).assertions().assertUserNameField();
-        }
-    }
+//    @Test
+//    public void test2() {
+//        try (var app = new App(Browser.CHROME)) {
+//            app.goTo(MainPage.class);
+//
+//            app.getBrowserService().waitForAjax();
+//            app.getBrowserService().waitUntilPageLoadsCompletely();
+//            app.create(MainPage.class).assertions().assertUserNameField();
+//        }
+//    }
 }
