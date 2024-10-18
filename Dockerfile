@@ -1,10 +1,11 @@
 # Use Maven with OpenJDK 22 as the base image
 FROM maven:3.9.8-eclipse-temurin-22
 
-# Set the working directory
 WORKDIR /app
 
-# Install dependencies (including wget and unzip)
+COPY . /app
+
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     curl gnupg wget unzip xvfb ca-certificates && \
     curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
