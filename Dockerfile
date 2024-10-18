@@ -4,6 +4,12 @@ FROM maven:3.9.8-eclipse-temurin-22
 # Set the working directory
 WORKDIR /app
 
+# Install necessary libraries
+RUN apt-get update && \
+    apt-get install -y libglib2.0-0 libnss3 libx11-xcb1 x11vnc xorg xvfb gtk2-engines-pixbuf dbus-x11 xfonts-base xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable unzip && \
+    apt-get clean && \
+    rm -rf /tmp/* /var/tmp/*
+
 # Copy the entire project into the container
 COPY . /app
 
