@@ -1,4 +1,4 @@
-# Maven image based on JDK 16
+# Maven image based on JDK 22
 FROM maven:3.9.8-eclipse-temurin-22
 
 # Set working directory
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     apt-get update && apt-get install -y google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
-# Install the latest version of ChromeDriver (ensure it matches the installed Chrome)
+# Install the latest version of ChromeDriver
 RUN CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
     wget -q https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
